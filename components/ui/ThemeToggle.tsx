@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore, useEffect } from "react";
 import Image from "next/image";
 
 interface ThemeToggleProps {
@@ -27,20 +27,35 @@ function getSnapshot() {
 }
 
 function getServerSnapshot() {
-  return false;
+  return true;
 }
 
 export function ThemeToggle({ className = "" }: ThemeToggleProps) {
   const isDark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("kanban_theme");
+      if (saved === "light") {
+        document.documentElement.classList.remove("dark");
+      } else if (saved === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    } catch {}
+  }, []);
+
   const toggleTheme = () => {
     const newIsDark = !isDark;
     if (newIsDark) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("kanban_theme", "dark");
+      try {
+        localStorage.setItem("kanban_theme", "dark");
+      } catch {}
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("kanban_theme", "light");
+      try {
+        localStorage.setItem("kanban_theme", "light");
+      } catch {}
     }
   };
 
