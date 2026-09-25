@@ -1,26 +1,133 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: var(--font-plus-jakarta-sans), "Plus Jakarta Sans", sans-serif;
+  
+  /* Primary & Accent Colors from Figma */
+  --color-primary: #635FC7;
+  --color-primary-hover: #A8A4FF;
+  --color-destructive: #EA5555;
+  --color-destructive-hover: #FF9898;
+  
+  /* Neutral Palette */
+  --color-black-main: #000112;
+  --color-very-dark-grey: #20212C;
+  --color-dark-grey: #2B2C37;
+  --color-lines-dark: #3E3F4E;
+  --color-medium-grey: #828FA3;
+  --color-lines-light: #E4EBFA;
+  --color-light-grey: #F4F7FD;
+  --color-white-pure: #FFFFFF;
+
+  /* Semantic Theme tokens */
+  --color-bg-page: var(--bg-page);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-subtask: var(--bg-subtask);
+  --color-text-main: var(--text-main);
+  --color-text-secondary: var(--text-secondary);
+  --color-border-subtle: var(--border-color);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-page: #F4F7FD;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F4F7FD;
+  --bg-subtask: #F4F7FD;
+  --bg-subtask-hover: rgba(99, 95, 199, 0.25);
+  --text-main: #000112;
+  --text-secondary: #828FA3;
+  --border-color: #E4EBFA;
+  --input-bg: #FFFFFF;
+  --input-border: rgba(130, 143, 163, 0.25);
+  --dropdown-bg: #FFFFFF;
+  --dropdown-shadow: 0px 10px 20px 0px rgba(54, 78, 126, 0.25);
+  --btn-secondary-bg: rgba(99, 95, 199, 0.1);
+  --btn-secondary-hover: rgba(99, 95, 199, 0.25);
+  --btn-secondary-text: #635FC7;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --bg-page: #20212C;
+  --bg-surface: #2B2C37;
+  --bg-surface-secondary: #20212C;
+  --bg-subtask: #20212C;
+  --bg-subtask-hover: rgba(99, 95, 199, 0.25);
+  --text-main: #FFFFFF;
+  --text-secondary: #828FA3;
+  --border-color: #3E3F4E;
+  --input-bg: #2B2C37;
+  --input-border: rgba(130, 143, 163, 0.25);
+  --dropdown-bg: #20212C;
+  --dropdown-shadow: 0px 10px 20px 0px rgba(54, 78, 126, 0.25);
+  --btn-secondary-bg: #FFFFFF;
+  --btn-secondary-hover: #FFFFFF;
+  --btn-secondary-text: #635FC7;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Typography styles matching Figma specifications */
+.text-heading-xl {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+.text-heading-l {
+  font-size: 18px;
+  line-height: 23px;
+  font-weight: 700;
+}
+
+.text-heading-m {
+  font-size: 15px;
+  line-height: 19px;
+  font-weight: 700;
+}
+
+.text-heading-s {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+}
+
+.text-body-l {
+  font-size: 13px;
+  line-height: 23px;
+  font-weight: 500;
+}
+
+.text-body-m {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 700;
+}
+
+/* Custom scrollbar matching design system */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #828FA340;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #828FA380;
 }
