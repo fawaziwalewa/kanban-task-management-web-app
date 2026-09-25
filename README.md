@@ -41,7 +41,7 @@ Users should be able to:
 ### Links
 
 - GitHub Repository: [https://github.com/fawaziwalewa/kanban-task-management-web-app](https://github.com/fawaziwalewa/kanban-task-management-web-app)
-- Live Site URL: [https://kanban-task-management-web-app-fawaziwalewas-projects.vercel.app](https://kanban-task-management-web-app-fawaziwalewas-projects.vercel.app)
+- Live Site URL: [https://main-umber-pi-58.vercel.app](https://main-umber-pi-58.vercel.app)
 - Solution on Frontend Mentor: [https://www.frontendmentor.io/solutions/kanban-task-management-web-app-with-nextjs-tailwind-and-typescript](https://www.frontendmentor.io/profile/fawaziwalewa)
 
 ## My process
