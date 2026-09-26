@@ -15,7 +15,7 @@ interface SelectedTaskCoord {
   taskIndex: number;
 }
 
-interface KanbanContextType {
+export interface KanbanContextType {
   boards: Board[];
   activeBoardIndex: number;
   activeBoard: Board | null;
@@ -213,13 +213,24 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     const existingCols = activeBoard.columns;
     const updatedColumns = columnNames
       .filter((c) => c.name.trim().length > 0)
-      .map((c) => {
-        const existing = existingCols.find(
-          (ex) => ex.name.toLowerCase() === c.name.trim().toLowerCase()
-        );
+      .map((c, index) => {
+        // Match existing column by ID first, then fallback to name or index
+        const existing = c.id
+          ? existingCols.find((ex) => ex.id === c.id)
+          : existingCols.find(
+              (ex) => ex.name.toLowerCase() === c.name.trim().toLowerCase()
+            ) || existingCols[index];
+
+        const targetName = c.name.trim();
+        // If column was renamed, update internal tasks status to match new column name
+        const tasks = existing
+          ? existing.tasks.map((t) => ({ ...t, status: targetName }))
+          : [];
+
         return {
-          name: c.name.trim(),
-          tasks: existing ? existing.tasks : [],
+          id: c.id || existing?.id || `col-${Date.now()}-${index}`,
+          name: targetName,
+          tasks,
         };
       });
 

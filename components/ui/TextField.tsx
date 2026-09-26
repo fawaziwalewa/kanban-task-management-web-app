@@ -20,6 +20,7 @@ export function TextField({
 }: TextFieldProps) {
   const generatedId = useId();
   const inputId = id || generatedId;
+  const errorId = `${inputId}-error`;
   const isError = Boolean(error);
   const displayErrorText = typeof error === "string" ? error : isError ? errorMessage : null;
 
@@ -36,7 +37,9 @@ export function TextField({
       <div className="relative flex items-center">
         <input
           id={inputId}
-          className={`w-full h-10 px-4 rounded border text-[13px] leading-[23px] font-medium transition-colors outline-none
+          aria-invalid={isError ? "true" : undefined}
+          aria-describedby={isError && displayErrorText ? errorId : undefined}
+          className={`w-full h-10 px-4 rounded border text-[13px] leading-[23px] font-medium transition-colors outline-none focus-visible:ring-1 focus-visible:ring-primary
             bg-white dark:bg-dark-grey text-black-main dark:text-white placeholder:text-black-main/25 dark:placeholder:text-white/25
             ${isError
               ? "border-destructive pr-32"
@@ -46,7 +49,11 @@ export function TextField({
           {...props}
         />
         {isError && displayErrorText && (
-          <span className="absolute right-4 text-[13px] leading-[23px] font-medium text-destructive pointer-events-none select-none">
+          <span
+            id={errorId}
+            role="alert"
+            className="absolute right-4 text-[13px] leading-[23px] font-medium text-destructive pointer-events-none select-none"
+          >
             {displayErrorText}
           </span>
         )}
@@ -74,6 +81,7 @@ export function TextArea({
 }: TextAreaProps) {
   const generatedId = useId();
   const inputId = id || generatedId;
+  const errorId = `${inputId}-error`;
   const isError = Boolean(error);
   const displayErrorText = typeof error === "string" ? error : isError ? errorMessage : null;
 
@@ -91,7 +99,9 @@ export function TextArea({
         <textarea
           id={inputId}
           rows={rows}
-          className={`w-full p-4 rounded border text-[13px] leading-[23px] font-medium transition-colors outline-none resize-none
+          aria-invalid={isError ? "true" : undefined}
+          aria-describedby={isError && displayErrorText ? errorId : undefined}
+          className={`w-full p-4 rounded border text-[13px] leading-[23px] font-medium transition-colors outline-none resize-none focus-visible:ring-1 focus-visible:ring-primary
             bg-white dark:bg-dark-grey text-black-main dark:text-white placeholder:text-black-main/25 dark:placeholder:text-white/25
             ${isError
               ? "border-destructive"
@@ -101,7 +111,11 @@ export function TextArea({
           {...props}
         />
         {isError && displayErrorText && (
-          <span className="mt-1 text-[13px] leading-5.75 font-medium text-destructive self-end">
+          <span
+            id={errorId}
+            role="alert"
+            className="mt-1 text-[13px] leading-5.75 font-medium text-destructive self-end"
+          >
             {displayErrorText}
           </span>
         )}

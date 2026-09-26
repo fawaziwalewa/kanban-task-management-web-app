@@ -44,11 +44,11 @@ export function Icon({ name, className = "", size, alt = "" }: IconProps) {
   return (
     <Image
       src={`/icon-${name}.svg`}
-      alt={alt || `${name} icon`}
+      alt={alt}
+      aria-hidden={alt === "" ? true : undefined}
       width={width}
       height={height}
-      style={{ width: "auto", height: "auto" }}
-      className={`inline-block ${className}`}
+      className={`inline-block w-auto h-auto ${className}`}
     />
   );
 }

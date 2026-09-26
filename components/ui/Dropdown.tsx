@@ -25,8 +25,11 @@ export function Dropdown({
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const listboxRef = useRef<HTMLDivElement>(null);
 
-  const selectedOption = options.find((opt) => opt.value === value) || options[0];
+  const selectedIndex = options.findIndex((opt) => opt.value === value);
+  const selectedOption = options[selectedIndex] || options[0];
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -46,9 +49,32 @@ export function Dropdown({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
       setIsOpen(false);
+      triggerRef.current?.focus();
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       setIsOpen((prev) => !prev);
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (!isOpen) {
+        setIsOpen(true);
+      } else {
+        const nextIndex = selectedIndex < options.length - 1 ? selectedIndex + 1 : 0;
+        onChange(options[nextIndex].value);
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!isOpen) {
+        setIsOpen(true);
+      } else {
+        const prevIndex = selectedIndex > 0 ? selectedIndex - 1 : options.length - 1;
+        onChange(options[prevIndex].value);
+      }
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      if (options.length > 0) onChange(options[0].value);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      if (options.length > 0) onChange(options[options.length - 1].value);
     }
   };
 
@@ -61,12 +87,13 @@ export function Dropdown({
       )}
 
       <button
+        ref={triggerRef}
         type="button"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
-        className={`w-full h-10 px-4 rounded border text-[13px] leading-[23px] font-medium flex items-center justify-between transition-colors text-left outline-none cursor-pointer
+        className={`w-full h-10 px-4 rounded border text-[13px] leading-[23px] font-medium flex items-center justify-between transition-colors text-left outline-none cursor-pointer focus-visible:ring-1 focus-visible:ring-primary
           bg-white dark:bg-dark-grey text-black-main dark:text-white
           ${isOpen
             ? "border-primary"
@@ -85,8 +112,10 @@ export function Dropdown({
 
       {isOpen && (
         <div
+          ref={listboxRef}
           role="listbox"
-          className="absolute top-[calc(100%+8px)] left-0 w-full z-50 p-4 rounded-lg flex flex-col gap-3 shadow-[0px_10px_20px_0px_rgba(54,78,126,0.25)] bg-white dark:bg-very-dark-grey border border-medium-grey/10 animate-in fade-in-50 zoom-in-95 duration-150"
+          tabIndex={-1}
+          className="absolute top-[calc(100%+8px)] left-0 w-full z-50 p-4 rounded-lg flex flex-col gap-3 shadow-[0px_10px_20px_0px_rgba(54,78,126,0.25)] bg-white dark:bg-very-dark-grey border border-medium-grey/10 animate-in fade-in-50 zoom-in-95 duration-150 focus:outline-none"
         >
           {options.map((option) => (
             <button
@@ -97,10 +126,11 @@ export function Dropdown({
               onClick={() => {
                 onChange(option.value);
                 setIsOpen(false);
+                triggerRef.current?.focus();
               }}
-              className={`text-[13px] leading-[23px] font-medium text-left cursor-pointer transition-colors outline-none
+              className={`text-[13px] leading-[23px] font-medium text-left cursor-pointer transition-colors outline-none focus-visible:text-primary
                 ${option.value === value
-                  ? "text-black-main dark:text-white font-bold"
+                  ? "text-primary font-bold"
                   : "text-medium-grey hover:text-black-main dark:hover:text-white"
                 }`}
             >

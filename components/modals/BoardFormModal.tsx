@@ -30,31 +30,30 @@ function BoardFormContent({
   }>({});
 
   const handleColumnChange = (index: number, val: string) => {
-    const updated = [...columns];
-    updated[index].name = val;
-    setColumns(updated);
+    setColumns((prev) =>
+      prev.map((col, idx) => (idx === index ? { ...col, name: val } : col))
+    );
 
     if (errors.columns && errors.columns[index] && val.trim()) {
-      const updatedErrors = { ...errors };
-      if (updatedErrors.columns) {
-        updatedErrors.columns[index] = false;
-        setErrors(updatedErrors);
-      }
+      setErrors((prev) => ({
+        ...prev,
+        columns: prev.columns?.map((err, idx) => (idx === index ? false : err)),
+      }));
     }
   };
 
   const handleAddColumn = () => {
-    setColumns([...columns, { name: "" }]);
+    setColumns((prev) => [...prev, { id: `new-col-${Date.now()}-${prev.length}`, name: "" }]);
   };
 
   const handleRemoveColumn = (index: number) => {
     if (columns.length > 1) {
-      setColumns(columns.filter((_, idx) => idx !== index));
+      setColumns((prev) => prev.filter((_, idx) => idx !== index));
       if (errors.columns) {
-        setErrors({
-          ...errors,
-          columns: errors.columns.filter((_, idx) => idx !== index),
-        });
+        setErrors((prev) => ({
+          ...prev,
+          columns: prev.columns?.filter((_, idx) => idx !== index),
+        }));
       }
     }
   };
@@ -119,7 +118,7 @@ function BoardFormContent({
         </label>
         <div className="flex flex-col gap-3">
           {columns.map((column, cIdx) => (
-            <div key={cIdx} className="flex items-center gap-3">
+            <div key={column.id || `col-${cIdx}`} className="flex items-center gap-3">
               <div className="flex-1">
                 <TextField
                   placeholder={

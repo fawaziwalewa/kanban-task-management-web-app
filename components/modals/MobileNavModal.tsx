@@ -31,6 +31,9 @@ export function MobileNavModal() {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Board Navigation"
       className="md:hidden fixed inset-0 top-16 sm:top-20 z-40 bg-black/50 p-6 flex justify-center items-start animate-in fade-in-50 duration-150"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
@@ -45,15 +48,16 @@ export function MobileNavModal() {
           </span>
         </div>
 
-        <nav className="pr-4 space-y-1">
+        <nav className="pr-4 space-y-1" aria-label="Boards List">
           {boards.map((board, idx) => {
             const isActive = idx === activeBoardIndex;
             return (
               <button
-                key={idx}
+                key={board.id || idx}
                 type="button"
                 onClick={() => setActiveBoardIndex(idx)}
-                className={`w-full h-12 pl-6 rounded-r-full flex items-center gap-3 text-[15px] font-bold transition-all cursor-pointer text-left
+                aria-current={isActive ? "page" : undefined}
+                className={`w-full h-12 pl-6 rounded-r-full flex items-center gap-3 text-[15px] font-bold transition-all cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
                   ${isActive
                     ? "bg-primary text-white"
                     : "text-medium-grey hover:bg-primary/10 hover:text-primary dark:hover:bg-white dark:hover:text-primary"
@@ -71,7 +75,7 @@ export function MobileNavModal() {
           <button
             type="button"
             onClick={openAddBoard}
-            className="w-full h-12 pl-6 rounded-r-full flex items-center gap-3 text-[15px] font-bold text-primary hover:bg-primary/10 dark:hover:bg-white transition-all cursor-pointer"
+            className="w-full h-12 pl-6 rounded-r-full flex items-center gap-3 text-[15px] font-bold text-primary hover:bg-primary/10 dark:hover:bg-white transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Icon name="board" className="brightness-125" />
             <span>+ Create New Board</span>

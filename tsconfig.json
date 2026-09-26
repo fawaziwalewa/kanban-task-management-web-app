@@ -18,6 +18,7 @@
         "name": "next"
       }
     ],
+    "types": ["@testing-library/jest-dom"],
     "paths": {
       "@/*": ["./*"]
     }
@@ -30,5 +31,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "__tests__", "vitest.config.mts", "vitest.setup.ts"]
 }

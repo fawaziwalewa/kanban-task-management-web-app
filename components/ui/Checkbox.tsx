@@ -27,6 +27,7 @@ export function Checkbox({
       htmlFor={inputId}
       className={`group flex items-center gap-4 p-3 rounded transition-colors cursor-pointer select-none
         bg-light-grey dark:bg-very-dark-grey hover:bg-primary/25 dark:hover:bg-primary/25
+        has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary has-[:focus-visible]:outline-none
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
         ${className}`}
     >

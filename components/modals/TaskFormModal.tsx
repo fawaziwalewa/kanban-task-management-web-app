@@ -24,7 +24,7 @@ function TaskFormContent({
   initialTitle: string;
   initialDescription: string;
   initialStatus: string;
-  initialSubtasks: { title: string; isCompleted: boolean }[];
+  initialSubtasks: { id?: string; title: string; isCompleted: boolean }[];
   statusOptions: { label: string; value: string }[];
 }) {
   const { createTask, updateTask } = useKanban();
@@ -32,38 +32,37 @@ function TaskFormContent({
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
   const [status, setStatus] = useState(initialStatus);
-  const [subtasks, setSubtasks] = useState<{ title: string; isCompleted: boolean }[]>(initialSubtasks);
+  const [subtasks, setSubtasks] = useState<{ id?: string; title: string; isCompleted: boolean }[]>(initialSubtasks);
   const [errors, setErrors] = useState<{
     title?: boolean;
     subtasks?: boolean[];
   }>({});
 
   const handleSubtaskChange = (index: number, val: string) => {
-    const updated = [...subtasks];
-    updated[index].title = val;
-    setSubtasks(updated);
+    setSubtasks((prev) =>
+      prev.map((s, idx) => (idx === index ? { ...s, title: val } : s))
+    );
 
     if (errors.subtasks && errors.subtasks[index] && val.trim()) {
-      const updatedErrors = { ...errors };
-      if (updatedErrors.subtasks) {
-        updatedErrors.subtasks[index] = false;
-        setErrors(updatedErrors);
-      }
+      setErrors((prev) => ({
+        ...prev,
+        subtasks: prev.subtasks?.map((err, idx) => (idx === index ? false : err)),
+      }));
     }
   };
 
   const handleAddSubtask = () => {
-    setSubtasks([...subtasks, { title: "", isCompleted: false }]);
+    setSubtasks((prev) => [...prev, { id: `sub-${Date.now()}-${prev.length}`, title: "", isCompleted: false }]);
   };
 
   const handleRemoveSubtask = (index: number) => {
     if (subtasks.length > 1) {
-      setSubtasks(subtasks.filter((_, idx) => idx !== index));
+      setSubtasks((prev) => prev.filter((_, idx) => idx !== index));
       if (errors.subtasks) {
-        setErrors({
-          ...errors,
-          subtasks: errors.subtasks.filter((_, idx) => idx !== index),
-        });
+        setErrors((prev) => ({
+          ...prev,
+          subtasks: prev.subtasks?.filter((_, idx) => idx !== index),
+        }));
       }
     }
   };
@@ -144,7 +143,7 @@ function TaskFormContent({
         </label>
         <div className="flex flex-col gap-3">
           {subtasks.map((subtask, sIdx) => (
-            <div key={sIdx} className="flex items-center gap-3">
+            <div key={subtask.id || `sub-${sIdx}`} className="flex items-center gap-3">
               <div className="flex-1">
                 <TextField
                   placeholder={

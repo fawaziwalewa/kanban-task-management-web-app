@@ -75,41 +75,41 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Typography styles matching Figma specifications */
+/* Typography styles matching Figma specifications using accessible rem units */
 .text-heading-xl {
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.875rem; /* 30px */
   font-weight: 700;
 }
 
 .text-heading-l {
-  font-size: 18px;
-  line-height: 23px;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.4375rem; /* 23px */
   font-weight: 700;
 }
 
 .text-heading-m {
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.1875rem; /* 19px */
   font-weight: 700;
 }
 
 .text-heading-s {
-  font-size: 12px;
-  line-height: 15px;
+  font-size: 0.75rem; /* 12px */
+  line-height: 0.9375rem; /* 15px */
   font-weight: 700;
-  letter-spacing: 2.4px;
+  letter-spacing: 0.15em; /* 2.4px */
 }
 
 .text-body-l {
-  font-size: 13px;
-  line-height: 23px;
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.4375rem; /* 23px */
   font-weight: 500;
 }
 
 .text-body-m {
-  font-size: 12px;
-  line-height: 15px;
+  font-size: 0.75rem; /* 12px */
+  line-height: 0.9375rem; /* 15px */
   font-weight: 700;
 }
 

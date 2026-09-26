@@ -48,15 +48,26 @@ Users should be able to:
 
 ### Built with
 
-- Semantic HTML5 markup
-- CSS custom properties & Design System Tokens
+- Semantic HTML5 markup & WAI-ARIA Accessible Patterns
+- CSS custom properties & Design System Tokens in `rem` units
 - Flexbox & CSS Grid
-- Mobile-first responsive layout architecture
+- Mobile-first responsive layout architecture (Mobile 375px, Tablet 768px, Desktop 1440px)
 - [React 19](https://react.dev/) - JavaScript UI library
 - [Next.js 16 (App Router)](https://nextjs.org/) - React Framework with Turbopack
 - [TypeScript](https://www.typescriptlang.org/) - Strict type safety across boards, columns, tasks, and subtasks
 - [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first CSS framework with custom `@custom-variant dark` support
+- [Vitest](https://vitest.dev/) & [React Testing Library](https://testing-library.com/) - 24+ Automated unit and component tests
 - Context API & Custom Hooks with `localStorage` synchronization
+
+### Running Tests
+
+```bash
+# Run full automated test suite with Vitest
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+```
 
 ### What I learned
 

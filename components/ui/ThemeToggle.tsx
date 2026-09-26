@@ -65,11 +65,11 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
     >
       <Image
         src="/icon-light-theme.svg"
-        alt="Light Theme"
+        alt=""
+        aria-hidden="true"
         width={18}
         height={18}
-        style={{ width: "auto", height: "auto" }}
-        className="opacity-80"
+        className="w-auto h-auto opacity-80"
       />
 
       <button
@@ -78,7 +78,7 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
         aria-checked={isDark}
         aria-label="Toggle dark mode"
         onClick={toggleTheme}
-        className="relative w-10 h-5 rounded-full bg-primary hover:bg-primary-hover p-0.75 transition-colors cursor-pointer outline-none"
+        className="relative w-10 h-5 rounded-full bg-primary hover:bg-primary-hover p-0.75 transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       >
         <div
           className={`w-3.5 h-3.5 rounded-full bg-white transition-transform duration-200 ${
@@ -89,11 +89,11 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
 
       <Image
         src="/icon-dark-theme.svg"
-        alt="Dark Theme"
+        alt=""
+        aria-hidden="true"
         width={15}
         height={15}
-        style={{ width: "auto", height: "auto" }}
-        className="opacity-80"
+        className="w-auto h-auto opacity-80"
       />
     </div>
   );

@@ -16,9 +16,17 @@ export function TaskCard({ task, colIndex, taskIndex }: TaskCardProps) {
   const totalCount = task.subtasks.length;
 
   return (
-    <article
+    <button
+      type="button"
       onClick={() => openTaskDetails(colIndex, taskIndex)}
-      className="group p-5 rounded-lg bg-white dark:bg-dark-grey shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] border border-medium-grey/10 hover:border-primary/40 cursor-pointer transition-all hover:scale-[1.01] select-none text-left"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openTaskDetails(colIndex, taskIndex);
+        }
+      }}
+      className="group w-full p-5 rounded-lg bg-white dark:bg-dark-grey shadow-[0px_4px_6px_0px_rgba(54,78,126,0.1)] border border-medium-grey/10 hover:border-primary/40 cursor-pointer transition-all hover:scale-[1.01] select-none text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      aria-label={`${task.title}, ${completedCount} of ${totalCount} subtasks completed`}
     >
       <h4 className="text-[15px] leading-5 font-bold text-black-main dark:text-white group-hover:text-primary transition-colors">
         {task.title}
@@ -28,6 +36,6 @@ export function TaskCard({ task, colIndex, taskIndex }: TaskCardProps) {
           {completedCount} of {totalCount} subtasks
         </p>
       )}
-    </article>
+    </button>
   );
 }
