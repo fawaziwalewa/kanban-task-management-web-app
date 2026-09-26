@@ -145,7 +145,7 @@ This project was built with the assistance of **Antigravity AI (Google DeepMind)
 - Website - [Fawaz Iwalewa](https://iwaola.me/)
 - Frontend Mentor - [@fawaziwalewa](https://www.frontendmentor.io/profile/fawaziwalewa)
 - GitHub - [@fawaziwalewa](https://github.com/fawaziwalewa)
-- Twitter - [@IwalewaFawaz](https://www.twitter.com/IwalewaFawaz)
+- Twitter - [@iwalewa_fawaz](https://x.com/iwalewa_fawaz)
 
 ## Acknowledgments
 
