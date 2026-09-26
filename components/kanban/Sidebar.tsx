@@ -37,7 +37,7 @@ export function Sidebar() {
               const isActive = idx === activeBoardIndex;
               return (
                 <button
-                  key={idx}
+                  key={board.id || `${board.name}-${idx}`}
                   type="button"
                   onClick={() => setActiveBoardIndex(idx)}
                   className={`w-full h-12 pl-6 lg:pl-8 rounded-r-full flex items-center gap-4 text-[15px] font-bold transition-all cursor-pointer text-left

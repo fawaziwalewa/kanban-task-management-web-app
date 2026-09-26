@@ -38,7 +38,7 @@ export function Column({ column, colIndex }: ColumnProps) {
       <div className="flex flex-col gap-5 min-h-25">
         {column.tasks.map((task, tIdx) => (
           <TaskCard
-            key={tIdx}
+            key={task.id || `${task.title}-${tIdx}`}
             task={task}
             colIndex={colIndex}
             taskIndex={tIdx}

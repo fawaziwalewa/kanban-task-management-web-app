@@ -8,6 +8,9 @@ interface ModalProps {
   children: ReactNode;
   className?: string;
   preventBackdropClose?: boolean;
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+  title?: string;
 }
 
 export function Modal({
@@ -16,6 +19,9 @@ export function Modal({
   children,
   className = "",
   preventBackdropClose = false,
+  ariaLabel,
+  ariaLabelledBy,
+  title,
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -92,6 +98,8 @@ export function Modal({
     <div
       role="dialog"
       aria-modal="true"
+      aria-label={ariaLabel || (!ariaLabelledBy && title ? title : undefined)}
+      aria-labelledby={ariaLabelledBy}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 overflow-y-auto"
       onClick={(e) => {
         if (!preventBackdropClose && e.target === e.currentTarget) {

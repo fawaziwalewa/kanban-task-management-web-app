@@ -12,11 +12,16 @@ describe("KanbanContext State & CRUD Operations", () => {
     <KanbanProvider>{children}</KanbanProvider>
   );
 
-  it("loads initial board data when localStorage is empty", () => {
+  it("loads initial board data and matches standard template boards", () => {
     const { result } = renderHook(() => useKanban(), { wrapper });
-    expect(result.current.boards.length).toBeGreaterThan(0);
+    expect(result.current.boards.length).toBe(3);
     expect(result.current.activeBoard).not.toBeNull();
-    expect(result.current.activeBoard?.name).toBeDefined();
+    expect(result.current.activeBoard?.name).toBe("Platform Launch");
+    expect(result.current.activeBoard?.columns.length).toBe(3);
+    expect(result.current.activeBoard?.columns[0].name).toBe("Todo");
+    expect(result.current.activeBoard?.columns[1].name).toBe("Doing");
+    expect(result.current.activeBoard?.columns[2].name).toBe("Done");
+    expect(result.current.activeBoard?.columns[0].tasks.length).toBeGreaterThan(0);
   });
 
   it("creates a new board and switches to it", () => {
@@ -65,7 +70,7 @@ describe("KanbanContext State & CRUD Operations", () => {
     expect(result.current.activeBoard?.columns[0].tasks[0].status).toBe("Renamed Col 1");
   });
 
-  it("deletes the active board", () => {
+  it("deletes the active board and safely falls back to remaining board", () => {
     const { result } = renderHook(() => useKanban(), { wrapper });
 
     act(() => {
@@ -78,6 +83,8 @@ describe("KanbanContext State & CRUD Operations", () => {
     });
 
     expect(result.current.boards.length).toBe(countBefore - 1);
+    expect(result.current.boards.some((b) => b.name === "Temporary Board")).toBe(false);
+    expect(result.current.activeBoard).not.toBeNull();
   });
 
   it("creates, updates, and deletes tasks", () => {

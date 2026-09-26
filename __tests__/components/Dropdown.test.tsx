@@ -69,24 +69,28 @@ describe("Dropdown Component Accessibility and Navigation", () => {
     expect(handleChange).toHaveBeenCalledWith("Doing");
   });
 
-  it("navigates options via keyboard ArrowDown / ArrowUp", () => {
+  it("navigates options via keyboard ArrowDown and ArrowUp", () => {
     const handleChange = vi.fn();
     render(
       <Dropdown
         label="Status"
         options={options}
-        value="Todo"
+        value="Doing"
         onChange={handleChange}
       />
     );
 
-    const button = screen.getByRole("button", { name: /todo/i });
-    // First arrow down opens dropdown
+    const button = screen.getByRole("button", { name: /doing/i });
+    // Arrow down opens dropdown
     fireEvent.keyDown(button, { key: "ArrowDown" });
     expect(button).toHaveAttribute("aria-expanded", "true");
 
-    // Second arrow down changes to next option
+    // Arrow down moves to next option (Done)
     fireEvent.keyDown(button, { key: "ArrowDown" });
-    expect(handleChange).toHaveBeenCalledWith("Doing");
+    expect(handleChange).toHaveBeenCalledWith("Done");
+
+    // Arrow up moves back to previous option (Todo)
+    fireEvent.keyDown(button, { key: "ArrowUp" });
+    expect(handleChange).toHaveBeenCalledWith("Todo");
   });
 });

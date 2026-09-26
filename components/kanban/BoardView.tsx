@@ -18,7 +18,11 @@ export function BoardView() {
   return (
     <main className="flex-1 overflow-x-auto overflow-y-auto p-6 flex gap-6 items-start">
       {activeBoard.columns.map((column, colIdx) => (
-        <Column key={colIdx} column={column} colIndex={colIdx} />
+        <Column
+          key={column.id || `${column.name}-${colIdx}`}
+          column={column}
+          colIndex={colIdx}
+        />
       ))}
 
       {/* + New Column CTA card */}

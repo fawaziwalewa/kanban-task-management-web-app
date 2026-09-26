@@ -71,10 +71,48 @@ pnpm test:watch
 
 ### What I learned
 
-Working on this comprehensive challenge allowed me to implement advanced component architecture, strict type handling, robust modal management, and smooth responsive design.
+Working on this comprehensive challenge provided deep hands-on experience in production frontend engineering, accessible component design, and immutable state architecture.
 
-#### 1. Tailwind CSS v4 Class-Based Dark Mode
-To support seamless switching between Light and Dark themes via a root HTML class in Tailwind CSS v4:
+#### 1. Accessible WAI-ARIA Modal Focus Management
+Implementing robust focus containment without heavy third-party modal dependencies required managing focusable DOM nodes dynamically:
+```tsx
+useEffect(() => {
+  if (!isOpen) return;
+  previousActiveElement.current = document.activeElement as HTMLElement;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      onClose();
+      return;
+    }
+    if (e.key === "Tab") {
+      const focusable = modalRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable || focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  };
+  document.addEventListener("keydown", handleKeyDown);
+  return () => {
+    document.removeEventListener("keydown", handleKeyDown);
+    previousActiveElement.current?.focus();
+  };
+}, [isOpen, onClose]);
+```
+
+#### 2. Tailwind CSS v4 Design Tokens in Accessible `rem` Units
+To respect user browser font scaling preferences while adhering to Figma design specifications:
 ```css
 @import "tailwindcss";
 
@@ -92,40 +130,35 @@ To support seamless switching between Light and Dark themes via a root HTML clas
   --color-light-surface: #ffffff;
   --color-light-lines: #e4ebfa;
 }
+
+.text-heading-xl { font-size: 1.5rem; line-height: 1.875rem; font-weight: 700; }
+.text-heading-l  { font-size: 1.125rem; line-height: 1.4375rem; font-weight: 700; }
+.text-heading-m  { font-size: 0.9375rem; line-height: 1.1875rem; font-weight: 700; }
+.text-heading-s  { font-size: 0.75rem; line-height: 0.9375rem; font-weight: 700; letter-spacing: 0.15em; }
 ```
 
-#### 2. Robust Dropdown Layering Over Modal Boundaries
-To prevent custom status dropdown menus from being clipped by modal dialog borders (matching the exact Figma specifications):
-```tsx
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      {/* overflow-visible allows absolute dropdown menus to float over the dialog */}
-      <div className="relative w-full max-w-[480px] bg-white dark:bg-dark-surface rounded-lg p-6 sm:p-8 overflow-visible shadow-xl">
-        {title && <h2 className="text-lg font-bold text-black dark:text-white mb-6">{title}</h2>}
-        {children}
-      </div>
-    </div>
-  );
-}
-```
-
-#### 3. Board & Task State Immutability
-Ensuring all CRUD operations update state immutably and instantly persist to `localStorage`:
+#### 3. Stable UUIDs & Synchronized Column Renaming
+To prevent data loss when users rename board columns, columns maintain stable identifiers while task `status` fields are automatically synchronized during board updates:
 ```typescript
-const updateTask = (boardId: string, updatedTask: Task) => {
-  setBoards(prevBoards =>
-    prevBoards.map(board => {
-      if (board.id !== boardId) return board;
+const updateBoard = (name: string, columnNames: { id?: string; name: string }[]) => {
+  if (!activeBoard) return;
+  const existingCols = activeBoard.columns;
+  const updatedColumns = columnNames
+    .filter((c) => c.name.trim().length > 0)
+    .map((c, index) => {
+      const existing = c.id
+        ? existingCols.find((ex) => ex.id === c.id)
+        : existingCols.find((ex) => ex.name.toLowerCase() === c.name.trim().toLowerCase()) || existingCols[index];
+      const targetName = c.name.trim();
       return {
-        ...board,
-        columns: board.columns.map(col => ({
-          ...col,
-          tasks: col.tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)),
-        })),
+        id: c.id || existing?.id || `col-${Date.now()}-${index}`,
+        name: targetName,
+        tasks: existing ? existing.tasks.map((t) => ({ ...t, status: targetName })) : [],
       };
-    })
+    });
+
+  setBoards((prev) =>
+    prev.map((b, idx) => (idx === activeBoardIndex ? { ...b, name: name.trim(), columns: updatedColumns } : b))
   );
 };
 ```
@@ -133,15 +166,17 @@ const updateTask = (boardId: string, updatedTask: Task) => {
 ### Continued development
 
 Future enhancements planned for this project include:
-- **Full-Stack Persistence**: Connecting to a PostgreSQL database via Prisma/Supabase for authenticated multi-device sync.
+- **Full-Stack Database Persistence**: Connecting to a PostgreSQL database via Prisma/Supabase for authenticated multi-device sync.
 - **Drag-and-Drop Animations**: Enhancing drag and drop task moving across columns with `@dnd-kit/core` and smooth physics animations.
 - **Real-Time Collaboration**: Adding live updates via WebSockets so teams can collaborate on boards concurrently.
 
 ### Useful resources
 
-- [Frontend Mentor](https://www.frontendmentor.io) - Invaluable real-world design specifications and Figma assets.
-- [Next.js Documentation](https://nextjs.org/docs) - App Router guides and best practices for React 19.
+- [W3C WAI-ARIA Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) - Comprehensive guide for accessible modal dialog design and focus trapping.
+- [W3C WAI-ARIA Listbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) - Standard keyboard interaction patterns for custom status dropdown selectors.
+- [Vitest Documentation](https://vitest.dev/guide/) - Blazing fast unit testing framework integrated with Vite and JSDOM.
 - [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs) - Reference for modern theme tokens and CSS variables.
+- [Next.js App Router Documentation](https://nextjs.org/docs/app) - App Router best practices for React 19 server/client components.
 
 ### AI Collaboration
 
